@@ -167,7 +167,7 @@ double getMaxInMatrix(double max, double *A, uint64_t n, uint64_t m)
 	}
  //element A_ij has index i * m + j
 
-}//element A_ij has index i * m + j
+}
 
 
 /* Rajouter les prototypes de vos méthodes ici. Par exemple */
@@ -201,7 +201,154 @@ void        matrixMultiplyNaive (double *S, double *A, double *B, uint64_t p, ui
 */
 void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n){
 
-    /* Votre code ici */
+    if(n = 2){
+      double m1,m2,m3,m4,m5,m6,m7;
+      m1 = (A[0] + A[3])*(B[0]+ B[3]);
+      m2 = (A[2] + A[3])*B[0];
+      m3 = (B[2] - B[3])*A[0];
+      m4 = (B[2] - B[0])*A[3];
+      m5 = (A[0] + A[1])*B[3];
+      m6 = (A[2] - A[0])*(B[0]+ B[1]);
+      m7 = (A[1] - A[3])*(B[2]+ B[3]);
+
+      S[0] = m1+m4-m5+m7;
+      S[1] = m3+m5;
+      S[2] = m2 + m4;
+      S[3] = m1 - m2 + m3 + m6;
+
+
+
+    }else{
+      double* tmp,*tmp2;
+      tmp = allocateMatrix(n/2,n/2);
+      tmp2 = allocateMatrix(n/2,n/2);
+
+      double* resBlock0,*resBlock1,*resBlock2,*resBlock3;
+
+      resBlock0 = allocateMatrix(n/2,n/2);
+      resBlock1 = allocateMatrix(n/2,n/2);
+      resBlock2 = allocateMatrix(n/2,n/2);
+      resBlock3 = allocateMatrix(n/2,n/2);
+      
+      
+
+      double* m1,*m2,*m3,*m4,*m5,*m6,*m7;
+      
+      double* A0 = allocateMatrix(n/2,n/2);
+      double* A1 = allocateMatrix(n/2,n/2);
+      double* A2 = allocateMatrix(n/2,n/2);
+      double* A3 = allocateMatrix(n/2,n/2);
+      double* B0 = allocateMatrix(n/2,n/2);
+      double* B1 = allocateMatrix(n/2,n/2);
+      double* B2 = allocateMatrix(n/2,n/2);
+      double* B3 = allocateMatrix(n/2,n/2);
+
+      //dividing the matrix into four smaller matrices
+      for(int i = 0 ;i <= n-1; i++){
+       if(i < n/2){
+         for(int j = 0 ; j <= n-1 ; j++){
+           if(j< n / 2){
+             A0[(i * n/2) + j] = A[(i * n) + j ] ;
+             B0[(i * n/2) + j] = B[(i * n) + j ] ;
+           }else{
+             A1[(i * n/2) + (j % n/2)] = A[(i * n) + j ] ;
+             B1[(i * n/2) + (j % n/2)] = B[(i * n) + j ] ;
+           }
+         }
+       }else{
+         for(int j = 0 ; j <= n-1 ; j++){
+           if(j< n / 2){
+             A2[((i%2) * n/2) + j] = A[(i * n) + j ] ;
+             B2[((i%2) * n/2) + j] = B[(i * n) + j ] ;
+           }else{
+             A3[((i%2) * n/2) + (j % n/2)] = A[(i * n) + j ] ;
+             B3[((i%2) * n/2) + (j % n/2)] = B[(i * n) + j ] ;
+           }
+         }
+       }
+      
+
+      }
+      
+
+      //m1
+      matrixAdd(tmp , A0 , A3 , n/2 , n/2);
+      matrixAdd(tmp2 , B0 , B3 , n/2 , n/2);
+      matrixMultiplyStrassen(m1,tmp,tmp2,n/2);
+
+      //m2
+      matrixAdd(tmp , A2 , A3 , n/2 , n/2);
+      matrixMultiplyStrassen(m2,tmp,B0,n/2);
+
+      //m3
+      matrixSub(tmp , B2 , B3 , n/2 , n/2);
+      matrixMultiplyStrassen(m3,tmp,A0,n/2);
+
+      //m4
+      matrixSub(tmp , B2 , B0 , n/2 , n/2);
+      matrixMultiplyStrassen(m4,tmp,A3,n/2);
+
+
+      //m5
+      matrixAdd(tmp , A0 , A1 , n/2 , n/2);
+      matrixMultiplyStrassen(m5,tmp,B3,n/2);
+
+      //m6
+      matrixSub(tmp , A2 , A0 , n/2 , n/2);
+      matrixAdd(tmp2 , B0 , B1 , n/2 , n/2);
+      matrixMultiplyStrassen(m6,tmp,tmp2,n/2);
+
+      //m7
+      matrixSub(tmp , A1 , A3 , n/2 , n/2);
+      matrixAdd(tmp2 , B2 , B3 , n/2 , n/2);
+      matrixMultiplyStrassen(m7,tmp,tmp2,n/2);
+
+
+      matrixAdd(tmp,m1,m4,n/2,n/2);
+      matrixSub(tmp2,m7,m5,n/2,n/2);
+      matrixAdd(resBlock0,tmp,tmp2,n/2,n/2);
+
+      matrixAdd(resBlock1,m3,m5,n/2,n/2);
+
+ 
+      matrixAdd(resBlock2,m2,m4,n/2,n/2);
+
+
+      matrixAdd(tmp,m3,m6,n/2,n/2);
+      matrixSub(tmp2,m1,m2,n/2,n/2);
+      matrixAdd(resBlock3,tmp,tmp2,n/2,n/2);
+
+      //filling the result matrix S
+      for(int i = 0 ;i <= n-1; i++){
+       if(i < n/2){
+         for(int j = 0 ; j <= n-1 ; j++){
+           if(j< n / 2){
+             S[(i * n) + j ] =  resBlock0[(i * n/2) + j] ;
+            
+           }else{
+             S[(i * n) + j ] = resBlock1[(i * n/2) + (j % n/2)] ;
+             
+           }
+         }
+       }else{
+         for(int j = 0 ; j <= n-1 ; j++){
+           if(j< n / 2){
+             S[(i * n) + j ] = resBlock2[((i%2) * n/2) + j]  ;
+             
+           }else{
+             S[(i * n) + j ] = resBlock3[((i%2) * n/2) + (j % n/2)];
+             
+           }
+         }
+       }
+      
+
+      }
+      
+
+    }
+
+    
 }
 
 /* 
