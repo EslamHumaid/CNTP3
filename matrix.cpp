@@ -1,6 +1,7 @@
 #include "matrix.hpp"
 #include <cstdint>
- 
+#include <iostream>
+ using namespace std;
 /*
     Nous allons stocker des matrices dans des tablaux à 1 dimension:
     Par exemple, matrice de taille n x m est stockué comme:
@@ -177,22 +178,19 @@ The result matrix S = A*B  is of size (p x r).
 We assume that S has already been allocated outside the function.
 */
 void        matrixMultiplyNaive (double *S, double *A, double *B, uint64_t p, uint64_t k, uint64_t r){
-      double res;
+    
 
-      for(int i = 0 ; i <= p*r ; i++){
-        res = 0;
+    for (int s = 0; s < r; s++){ 
 
-        for(int j = 1 ; j <= k;j++ ){
-          res = res + A[(j-1)*p] * B[j-1] ;  //element A_ij has an indexe of (j+(i-1)*n-1) if the first element is A_11
+      for (int i =0; i < p; i++){ 
 
-          
+        for (int j=0; j < k; j++){
+            S[i*r+s] += A[i*k+j] * B[j*k+s];
         }
-        S[i] = res;
-
 
       }
 
-
+    }
     
 }
 
@@ -201,11 +199,11 @@ void        matrixMultiplyNaive (double *S, double *A, double *B, uint64_t p, ui
 */
 void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n){
 
-    if(n = 2){
+    if(n == 2){
       double m1,m2,m3,m4,m5,m6,m7;
       m1 = (A[0] + A[3])*(B[0]+ B[3]);
       m2 = (A[2] + A[3])*B[0];
-      m3 = (B[2] - B[3])*A[0];
+      m3 = (B[1] - B[3])*A[0];
       m4 = (B[2] - B[0])*A[3];
       m5 = (A[0] + A[1])*B[3];
       m6 = (A[2] - A[0])*(B[0]+ B[1]);
@@ -233,6 +231,14 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
       
 
       double* m1,*m2,*m3,*m4,*m5,*m6,*m7;
+      m1 = allocateMatrix(n/2,n/2);
+      m2 = allocateMatrix(n/2,n/2);
+      m3 = allocateMatrix(n/2,n/2);
+      m4 = allocateMatrix(n/2,n/2);
+      m5 = allocateMatrix(n/2,n/2);
+      m6 = allocateMatrix(n/2,n/2);
+      m7 = allocateMatrix(n/2,n/2);
+
       
       double* A0 = allocateMatrix(n/2,n/2);
       double* A1 = allocateMatrix(n/2,n/2);
@@ -248,45 +254,47 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
        if(i < n/2){
          for(int j = 0 ; j <= n-1 ; j++){
            if(j< n / 2){
-             A0[(i * n/2) + j] = A[(i * n) + j ] ;
-             B0[(i * n/2) + j] = B[(i * n) + j ] ;
+             A0[(i * (n/2)) + j] = A[(i * n) + j ] ;
+             B0[(i * (n/2)) + j] = B[(i * n) + j ] ;
            }else{
-             A1[(i * n/2) + (j % n/2)] = A[(i * n) + j ] ;
-             B1[(i * n/2) + (j % n/2)] = B[(i * n) + j ] ;
+             A1[(i * (n/2)) + (j % (n/2))] = A[(i * n) + j ] ;
+             B1[(i * (n/2)) + (j % (n/2))] = B[(i * n) + j ] ;
            }
          }
        }else{
          for(int j = 0 ; j <= n-1 ; j++){
            if(j< n / 2){
-             A2[((i%2) * n/2) + j] = A[(i * n) + j ] ;
-             B2[((i%2) * n/2) + j] = B[(i * n) + j ] ;
+             A2[((i%2) * (n/2)) + j] = A[(i * n) + j ] ;
+             B2[((i%2) * (n/2)) + j] = B[(i * n) + j ] ;
            }else{
-             A3[((i%2) * n/2) + (j % n/2)] = A[(i * n) + j ] ;
-             B3[((i%2) * n/2) + (j % n/2)] = B[(i * n) + j ] ;
+             A3[((i%2) * (n/2)) + (j % (n/2))] = A[(i * n) + j ] ;
+             B3[((i%2) * (n/2)) + (j % (n/2))] = B[(i * n) + j ] ;
            }
          }
        }
       
 
       }
-      
+
+     
 
       //m1
       matrixAdd(tmp , A0 , A3 , n/2 , n/2);
       matrixAdd(tmp2 , B0 , B3 , n/2 , n/2);
       matrixMultiplyStrassen(m1,tmp,tmp2,n/2);
+      
 
       //m2
       matrixAdd(tmp , A2 , A3 , n/2 , n/2);
       matrixMultiplyStrassen(m2,tmp,B0,n/2);
 
       //m3
-      matrixSub(tmp , B2 , B3 , n/2 , n/2);
-      matrixMultiplyStrassen(m3,tmp,A0,n/2);
+      matrixSub(tmp , B1 , B3 , n/2 , n/2);
+      matrixMultiplyStrassen(m3,A0,tmp,n/2);
 
       //m4
       matrixSub(tmp , B2 , B0 , n/2 , n/2);
-      matrixMultiplyStrassen(m4,tmp,A3,n/2);
+      matrixMultiplyStrassen(m4,A3,tmp,n/2);
 
 
       //m5
@@ -323,20 +331,20 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
        if(i < n/2){
          for(int j = 0 ; j <= n-1 ; j++){
            if(j< n / 2){
-             S[(i * n) + j ] =  resBlock0[(i * n/2) + j] ;
+             S[(i * n) + j ] =  resBlock0[(i * (n/2)) + j] ;
             
            }else{
-             S[(i * n) + j ] = resBlock1[(i * n/2) + (j % n/2)] ;
+             S[(i * n) + j ] = resBlock1[(i * (n/2)) + (j % (n/2))] ;
              
            }
          }
        }else{
          for(int j = 0 ; j <= n-1 ; j++){
            if(j< n / 2){
-             S[(i * n) + j ] = resBlock2[((i%2) * n/2) + j]  ;
+             S[(i * n) + j ] = resBlock2[((i%2) * (n/2)) + j]  ;
              
            }else{
-             S[(i * n) + j ] = resBlock3[((i%2) * n/2) + (j % n/2)];
+             S[(i * n) + j ] = resBlock3[((i%2) * (n/2)) + (j % (n/2))];
              
            }
          }
@@ -359,7 +367,23 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
 */
 void        SolveTriangularSystemUP   (double *x, double *A, double *b, uint64_t n){
 
-    /* Votre code ici */
+    for(int i = n-1 ; i >= 0 ; i-- ){
+      double pivot = A[(i * n) + i];
+      b[i] = b[i] / pivot;
+      A[(i * n) + i] = pivot / pivot;
+
+      for(int j = i-n ; j >= 0; j=j-n){
+        A[(i * n) + j] = A[(i * n) + j] - (A[(i * n) + j]*pivot);
+        b[j] = b[j] - (b[j]*b[i]);
+
+
+
+      }
+      
+
+
+
+    }
 }
 
 /* 
