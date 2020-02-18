@@ -370,6 +370,7 @@ void        SolveTriangularSystemUP   (double *x, double *A, double *b, uint64_t
     for(int i = n-1 ; i >= 0 ; i-- ){
       double pivot = A[(i * n) + i];
       b[i] = b[i] / pivot;
+      x[i] = b[i];
       A[(i * n) + i] = pivot / pivot;
 
       for(int j = i-n ; j >= 0; j=j-n){
@@ -395,10 +396,64 @@ void        SolveTriangularSystemUP   (double *x, double *A, double *b, uint64_t
         *  false in case of failure, for example matrix is impossible to triangularize. 
 */
 bool        Triangularize           (double *A, double *b, uint64_t n){
-    
-    /* Votre code ici */
+  int toPivot = n +1;
 
-    return false;
+  for(int i = 0 ; i <= n*n ; i = i + toPivot){
+
+    if(A[i] == 0){  //swapping
+
+      int j = i;
+
+      while(A[j] == 0 && j < n*n){
+        j = j + n;
+      }
+
+      if(j > n*n){
+        return false;
+      }
+
+      for(int k = j%n ; k < n ; k++){  //swapping the lines
+        double tmp = A[i + k] ;
+        A[i+k] = A[j+k];
+        A[j+k] = tmp;
+
+
+      }
+
+      int LinePivot = (int)(i / n);
+      int indVect = (int)(j / n);  //index in the vector
+
+      //swapping the lines in the vector
+      double tmp = b[LinePivot] ;
+      b[LinePivot] = b[indVect];
+      b[indVect] = tmp;
+
+    }
+  
+
+    //triangularizing
+    for(int p = i+n; p <= n*n; p = p + n){
+
+      double valUnderPivot = A[p];
+      int lastInLine = n - (p%n);
+      for(int y = 0; y < lastInLine ; y++){
+        A[p+y] = A[p+y] - ((valUnderPivot/A[i])*A[i+y]);
+      }
+
+      int LinePivot = (int)(i / n);
+      int indVect = (int)(p / n);  //index in the vector
+
+      b[indVect] = b[indVect] - (valUnderPivot/A[i])*b[LinePivot];  //applying the same operation the the vector
+
+    }
+
+
+
+  }
+    
+    
+
+    return true;
 }
 
 /*
@@ -412,8 +467,15 @@ bool        Triangularize           (double *A, double *b, uint64_t n){
 */
 bool        SolveSystemGauss        (double *x, double *A, double *b, uint64_t n){
     
-    /* Votre code ici */
+    bool triangular = Triangularize(A,b,n);
+    writeMatrix(stdout, A, n, n);
+    if(triangular){
+      SolveTriangularSystemUP(x,A,b,n);
+      return true;
+    }else{
+      return false;
+    }
 
-    return false;
+    
 }
 

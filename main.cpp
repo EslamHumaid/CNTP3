@@ -89,7 +89,7 @@ int main(int argc, char** argv){
 
     writeMatrix(stdout,S,3,3);
     */
-
+   /*
     cout << "Test: matrixMultiplyNaive" << endl;
     cout << "expected result" << endl; 
     double res [] = {-2,-1,10,17,7,-22,-17,-7,34};
@@ -100,8 +100,35 @@ int main(int argc, char** argv){
     matrixMultiplyNaive(S,A,B,3,3,3);
     cout << "obtained result:" << endl; 
     writeMatrix(stdout, S, 3, 3);
+    */
+    /*
+    cout << "Test: Triangularize | expected result: A = [1,1,0,1], b = [1,1]" << endl;
+    double A [] = {4,1,1,1};
+    double b [] = {1,1};
+    Triangularize(A,b,2);
+    cout << "The matrix A : " << endl;
+    writeMatrix(stdout, A, 2,2);
+    cout << "The vector b : " << endl;
+    writeMatrix(stdout, b, 2, 1);
+    */
+    /*
+    cout << "Test: Triangularize | expected result: A[1,0,1,0,3,1,0,0,0.333] b[1,1,0.333]" << endl;
+    double A [] = {0,2,1,0,3,1,1,0,1};
+    double b [] = {1,1,1};
+    Triangularize(A,b,3);
+    cout << "The matrix A : " << endl;
+    writeMatrix(stdout, A, 3,3);
+    cout << "The vector b : " << endl;
+    writeMatrix(stdout, b, 3, 1);
+    */
 
     
+    cout << "Test: SolveTriangularSystemUP | expected result: 1 , 2 , 3" << endl;
+        double A [] = {0,5,4,8,2,0,8,0,3};
+        double x [] = {0,0,0};
+        double b [] = {1,4,9};
+        SolveSystemGauss(x,A,b,3);
+        writeMatrix(stdout, x, 1, 3);
 
     return 0;
 }
