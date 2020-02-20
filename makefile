@@ -22,8 +22,8 @@ EXEC = run.out
 all: $(EXEC)
 
 # dépendance des .h
-main.cpp: matrix.hpp
-main.cpp: matrix.hpp
+matrix.o: matrix.hpp
+main.o: matrix.hpp
 # règles de compilation
 %.o: %.c
 	$(CC) $(CCFLAGS) -o $@ -c $<

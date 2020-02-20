@@ -180,12 +180,12 @@ We assume that S has already been allocated outside the function.
 void        matrixMultiplyNaive (double *S, double *A, double *B, uint64_t p, uint64_t k, uint64_t r){
     
 
-    for (int s = 0; s < r; s++){ 
+    for (int s = 0; s < r; s++){ //the column of B.
 
-      for (int i =0; i < p; i++){ 
+      for (int i =0; i < p; i++){  //the line in A.
 
-        for (int j=0; j < k; j++){
-            S[i*r+s] += A[i*k+j] * B[j*k+s];
+        for (int j=0; j < k; j++){  //the line in B and column in A.
+            S[i*r+s] += A[i*k+j] * B[j*k+s]; //using the rule (element A_ij has index i * m + j).
         }
 
       }
@@ -194,12 +194,39 @@ void        matrixMultiplyNaive (double *S, double *A, double *B, uint64_t p, ui
     
 }
 
+/*
+determine wether a number is in the forme 2^n
+ */
+bool isPowerOftwo(uint64_t n){
+  if(n>0)
+    {
+        while(n%2 == 0)
+        {
+            n/=2;
+        }
+        if(n == 1)
+        {
+            return true;
+        }
+    }
+    if(n == 0 || n != 1)
+    {
+        return false;
+    }
+}
+
 /* Performs a multiplication of two sqaure matrices A and B (size n x n) by Strassen algorithm.
     We assume that S has already been allocated outside the function.
-*/
+    PRECOND:A,B have to be of size 2^n x 2
+ */
 void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n){
+    if(n == 1){
+      S[0] = A[0] * B[0] ;
 
-    if(n == 2){
+    }else if(n == 2){ //in this case the matrix is already in the form 2*2 so no need to divide it into smaller ones.
+      
+      
+      //using strassen formulas.
       double m1,m2,m3,m4,m5,m6,m7;
       m1 = (A[0] + A[3])*(B[0]+ B[3]);
       m2 = (A[2] + A[3])*B[0];
@@ -209,6 +236,7 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
       m6 = (A[2] - A[0])*(B[0]+ B[1]);
       m7 = (A[1] - A[3])*(B[2]+ B[3]);
 
+      //the result matrix.
       S[0] = m1+m4-m5+m7;
       S[1] = m3+m5;
       S[2] = m2 + m4;
@@ -216,20 +244,53 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
 
 
 
-    }else{
-      double* tmp,*tmp2;
+    }else{ // dividing the matrices into four n/2*n/2 matrices.
+
+      double* copyA = A;
+      double* copyB = B;
+      
+      if(!isPowerOftwo(n)){
+        int validN = n;
+        while(!isPowerOftwo(validN)){
+            validN += 1;
+        }
+        copyA = allocateMatrix(validN,validN);
+        copyB = allocateMatrix(validN,validN);
+
+        for(int i = 0 ; i < validN ; i++){
+
+          for(int j = 0 ; j < validN; j++){
+            if((i < n) && (j < n)){
+              copyA[(i*validN)+j] = A[(i*n) + j];
+              copyB[(i*validN)+j] = B[(i*n) + j];
+
+            }else{
+              copyA[(i*validN)+j] = 0;
+              copyB[(i*validN)+j] = 0;
+            }
+          }
+        }
+        
+    
+        n = validN;
+       
+        
+
+      }
+
+
+      double* tmp,*tmp2;  //temporary variables used in strassen formulas.
       tmp = allocateMatrix(n/2,n/2);
       tmp2 = allocateMatrix(n/2,n/2);
 
-      double* resBlock0,*resBlock1,*resBlock2,*resBlock3;
-
+      double* resBlock0,*resBlock1,*resBlock2,*resBlock3; //Elements of the result block.
       resBlock0 = allocateMatrix(n/2,n/2);
       resBlock1 = allocateMatrix(n/2,n/2);
       resBlock2 = allocateMatrix(n/2,n/2);
       resBlock3 = allocateMatrix(n/2,n/2);
       
       
-
+      //Allocation for variables to stock the strassen formulas values.
       double* m1,*m2,*m3,*m4,*m5,*m6,*m7;
       m1 = allocateMatrix(n/2,n/2);
       m2 = allocateMatrix(n/2,n/2);
@@ -240,6 +301,7 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
       m7 = allocateMatrix(n/2,n/2);
 
       
+      //Variables to stock the smaller matrices.
       double* A0 = allocateMatrix(n/2,n/2);
       double* A1 = allocateMatrix(n/2,n/2);
       double* A2 = allocateMatrix(n/2,n/2);
@@ -251,24 +313,24 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
 
       //dividing the matrix into four smaller matrices
       for(int i = 0 ;i <= n-1; i++){
-       if(i < n/2){
+       if(i < n/2){ //filling A0,A1,B0,B1.
          for(int j = 0 ; j <= n-1 ; j++){
            if(j< n / 2){
-             A0[(i * (n/2)) + j] = A[(i * n) + j ] ;
-             B0[(i * (n/2)) + j] = B[(i * n) + j ] ;
+             A0[(i * (n/2)) + j] = copyA[(i * n) + j ] ;
+             B0[(i * (n/2)) + j] = copyB[(i * n) + j ] ;
            }else{
-             A1[(i * (n/2)) + (j % (n/2))] = A[(i * n) + j ] ;
-             B1[(i * (n/2)) + (j % (n/2))] = B[(i * n) + j ] ;
+             A1[(i * (n/2)) + (j % (n/2))] = copyA[(i * n) + j ] ;
+             B1[(i * (n/2)) + (j % (n/2))] = copyB[(i * n) + j ] ;
            }
          }
-       }else{
+       }else{ //filling A2,A3,B2,B3.
          for(int j = 0 ; j <= n-1 ; j++){
            if(j< n / 2){
-             A2[((i%2) * (n/2)) + j] = A[(i * n) + j ] ;
-             B2[((i%2) * (n/2)) + j] = B[(i * n) + j ] ;
+             A2[((i%2) * (n/2)) + j] = copyA[(i * n) + j ] ;
+             B2[((i%2) * (n/2)) + j] = copyB[(i * n) + j ] ;
            }else{
-             A3[((i%2) * (n/2)) + (j % (n/2))] = A[(i * n) + j ] ;
-             B3[((i%2) * (n/2)) + (j % (n/2))] = B[(i * n) + j ] ;
+             A3[((i%2) * (n/2)) + (j % (n/2))] = copyA[(i * n) + j ] ;
+             B3[((i%2) * (n/2)) + (j % (n/2))] = copyB[(i * n) + j ] ;
            }
          }
        }
@@ -277,13 +339,12 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
       }
 
      
-
+      //Calculating strassen formulas with the new matrices.
       //m1
       matrixAdd(tmp , A0 , A3 , n/2 , n/2);
       matrixAdd(tmp2 , B0 , B3 , n/2 , n/2);
       matrixMultiplyStrassen(m1,tmp,tmp2,n/2);
       
-
       //m2
       matrixAdd(tmp , A2 , A3 , n/2 , n/2);
       matrixMultiplyStrassen(m2,tmp,B0,n/2);
@@ -295,7 +356,6 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
       //m4
       matrixSub(tmp , B2 , B0 , n/2 , n/2);
       matrixMultiplyStrassen(m4,A3,tmp,n/2);
-
 
       //m5
       matrixAdd(tmp , A0 , A1 , n/2 , n/2);
@@ -312,23 +372,23 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
       matrixMultiplyStrassen(m7,tmp,tmp2,n/2);
 
 
+      //Calculating the result blocks.
+      //resblock0
       matrixAdd(tmp,m1,m4,n/2,n/2);
       matrixSub(tmp2,m7,m5,n/2,n/2);
       matrixAdd(resBlock0,tmp,tmp2,n/2,n/2);
-
+      //resblock1
       matrixAdd(resBlock1,m3,m5,n/2,n/2);
-
- 
+      //resblock2
       matrixAdd(resBlock2,m2,m4,n/2,n/2);
-
-
+      //resblock3
       matrixAdd(tmp,m3,m6,n/2,n/2);
       matrixSub(tmp2,m1,m2,n/2,n/2);
       matrixAdd(resBlock3,tmp,tmp2,n/2,n/2);
 
-      //filling the result matrix S
+      //filling the result matrix S from the blocks.
       for(int i = 0 ;i <= n-1; i++){
-       if(i < n/2){
+       if(i < n/2){ //filling resblock0,resblock1.
          for(int j = 0 ; j <= n-1 ; j++){
            if(j< n / 2){
              S[(i * n) + j ] =  resBlock0[(i * (n/2)) + j] ;
@@ -338,7 +398,7 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
              
            }
          }
-       }else{
+       }else{//filling resblock2,resblock3.
          for(int j = 0 ; j <= n-1 ; j++){
            if(j< n / 2){
              S[(i * n) + j ] = resBlock2[((i%2) * (n/2)) + j]  ;
@@ -431,7 +491,7 @@ bool        Triangularize           (double *A, double *b, uint64_t n){
     }
   
 
-    //triangularizing
+    //Elimination de gauss
     for(int p = i+n; p <= n*n; p = p + n){
 
       double valUnderPivot = A[p];

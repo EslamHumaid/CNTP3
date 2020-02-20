@@ -122,13 +122,42 @@ int main(int argc, char** argv){
     writeMatrix(stdout, b, 3, 1);
     */
 
-    
+    /*    
     cout << "Test: SolveTriangularSystemUP | expected result: 1 , 2 , 3" << endl;
         double A [] = {0,5,4,8,2,0,8,0,3};
         double x [] = {0,0,0};
         double b [] = {1,4,9};
         SolveSystemGauss(x,A,b,3);
         writeMatrix(stdout, x, 1, 3);
+    */
+   
+   cout << "Test: solvouhjokeStrassen" << endl;
+        double* A = allocateMatrix(3,3);
+        A[0] = 1;
+        A[1] = 0;
+        A[2] = 1;
+        A[3] = 5;
+        A[4] = 0;
+        A[5] = 4;
+        A[6] = 2;
+        A[7] = 1;
+        A[8] = 0;
+        double* B = allocateMatrix(3,3);
+        B[0] = 0;
+        B[1] = 1;
+        B[2] = 2;
+        B[3] = 1;
+        B[4] = 2;
+        B[5] = 4;
+        B[6] = 0;
+        B[7] = 2;
+        B[8] = 1;
+        
+        
+        double* S = allocateMatrix(4,4);
+        matrixMultiplyStrassen(S,A,B,3);
+        writeMatrix(stdout, S, 4, 4);
 
+    
     return 0;
 }
