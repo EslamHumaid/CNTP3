@@ -564,8 +564,10 @@ bool        SolveSystemGauss        (double *x, double *A, double *b, uint64_t n
     cout<< "triangularizing the matrix..." << endl;
     bool triangular = Triangularize(A,b,n);
     cout<< "triangularized matrix :" << endl;
-    writeMatrix(stdout, A, n, n);
+    
     if(triangular){
+      cout<< "triangularized with success. triangularized matrix :" << endl;
+      writeMatrix(stdout, A, n, n);
       //step 2: Solve the system
       SolveTriangularSystemUP(x,A,b,n);
       return true;
