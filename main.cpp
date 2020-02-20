@@ -103,8 +103,9 @@ int main(int argc, char** argv){
     
     */
 
-    cout << "Test: SolveTriangularSystemUP | expected result: {-97/200 , -11/20 , 3/4 , 1/2}  "<< endl;
-
+    /*
+    cout << "Test of the function SolveTriangularSystemUP | expected result: {-0.485000 , -0.550000 , 0.750000 , 0.500000}  "<< endl;
+        //Example taken from the course
         double* A = allocateMatrix(4,4);
         A[0] = 10;
         A[1] = 3;
@@ -134,12 +135,113 @@ int main(int argc, char** argv){
 
         SolveTriangularSystemUP(x,A,b,4);
         writeMatrix(stdout, x, 4, 1);
+    */
+
+    /*
+    cout << "Test of the function Triangularize "<< endl;  
+    cout << "Expected result of A: {1,-3,2,0,7,-3,0,0,17} "<< endl;  //Example taken from the course
+    cout << "Expected result of b: {1,-4,32} "<< endl;
+
+        
+        double* A = allocateMatrix(3,3);
+        A[0] = 1 ;
+        A[1] = -3;
+        A[2] = 2 ;
+        A[3] = 2 ;
+        A[4] = 1 ;
+        A[5] = 1 ;
+        A[6] = 3 ;
+        A[7] = -1;
+        A[8] = 5 ;
 
 
+        double* b = allocateMatrix(3,1);
+        b[0] = 1 ;
+        b[1] = -2;
+        b[2] = 3 ;
+
+        Triangularize(A,b,3);
+
+        cout << "Writing the matrix A"<< endl;
+        writeMatrix(stdout, A, 3, 3);               //A[8] expected to be 17 got 2.428571
+
+        cout << "Writing the matrix B"<< endl;
+        writeMatrix(stdout, b, 3, 1);               //b[3] expected to be 32 got 4.571429 because the last line of the matrices A , b
+                                                    // was divided by 7 which will not affect the solution of the matrix
+
+    */
+   
+    /*
+    cout << "Testing the fonction: SolveSystemGauss , expected result: {7 , -1 , 10 , -4}  "<< endl;
+
+        double* A = allocateMatrix(4,4);
+        A[0] = 2;
+        A[1] = 3;
+        A[2] = 1;
+        A[3] = 5;
+        A[4] = 6;
+        A[5] = 13;
+        A[6] = 5;
+        A[7] = 19;
+        A[8] = 2;
+        A[9] = 19;
+        A[10] = 10;
+        A[11] = 23;
+        A[12] = 4;
+        A[13] = 10;
+        A[14] = 11;
+        A[15] = 31;
+
+        double* x = allocateMatrix(4,1);
+        setMatrixZero(x,4,1);
+
+        double* b = allocateMatrix(4,1);
+        b[0] = 1;
+        b[1] = 3;
+        b[2] = 3;
+        b[3] = 4;
+
+        SolveSystemGauss(x,A,b,4);
+        writeMatrix(stdout, x, 4, 1);
+
+    */
 
 
+    /*
+    cout << "Testing the fonction: SolveSystemGauss , expected result: {2 , -3 , 3 , -1}  "<< endl;
+        // Taken from TD exercises 
 
+        double* A = allocateMatrix(4,4);
+        A[0] = 2;
+        A[1] = 1;
+        A[2] = 1;
+        A[3] = -3;
+        A[4] = 6;
+        A[5] = 2;
+        A[6] = 5;
+        A[7] = -8;
+        A[8] = 4;
+        A[9] = 3;
+        A[10] = 3;
+        A[11] = -9;
+        A[12] = -2;
+        A[13] = -2;
+        A[14] = -5;
+        A[15] = 10;
 
+        double* x = allocateMatrix(4,1);
+        setMatrixZero(x,4,1);
+
+        double* b = allocateMatrix(4,1);
+        b[0] = 7;
+        b[1] = 29;
+        b[2] = 17;
+        b[3] = -23;
+
+        SolveSystemGauss(x,A,b,4);
+        writeMatrix(stdout, x, 4, 1);
+
+    */
 
     /*
     //EX1
@@ -294,6 +396,7 @@ int main(int argc, char** argv){
        
 
     */
+   /*
    cout << "Test: SolveTriangularSystemUP | expected result: 1 , 1 , 3" << endl;
             double A [] = {1,1,1,0,2,2,0,0,3};
             double x [] = {0,0,0};
@@ -301,4 +404,5 @@ int main(int argc, char** argv){
             SolveTriangularSystemUP(x,A,b,3); 
             writeMatrix(stdout, x, 1, 3);
     return 0;
+    */
 }
