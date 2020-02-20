@@ -8,6 +8,53 @@ using namespace std;
 
 int main(int argc, char** argv){
     /*
+    cout << "Test: matrixMultiplyNaive | expected result: S = { 9 , 2 , 33 , 4}" << endl;
+    double* A = allocateMatrix(2,2);
+    A[0] = 1;
+    A[1] = 2;
+    A[2] = 5;
+    A[3] = 4;
+
+    double* B = allocateMatrix(2,2);
+    B[0] = 5;
+    B[1] = 0;
+    B[2] = 2;
+    B[3] = 1;
+
+    double* S = allocateMatrix(2,2);
+    matrixMultiplyNaive(S,A,B,2,2,2);
+    writeMatrix(stdout, S, 2, 2);
+
+    */
+   
+   /*
+    cout << "Test: matrixMultiplyNaive | expected result: S = { 7 , 6 , 9 , 11 }" << endl;
+    double* A = allocateMatrix(2,3);
+    A[0] = 1;
+    A[1] = 0;
+    A[2] = 2;
+    A[3] = 3;
+    A[4] = 1;
+    A[5] = 2;
+
+    double* B = allocateMatrix(3,2);
+    B[0] = 1;
+    B[1] = 2;
+    B[2] = 0;
+    B[3] = 1;
+    B[4] = 3;
+    B[5] = 2;
+
+    double* S = allocateMatrix(2,2);
+    matrixMultiplyNaive(S,A,B,2,3,2);
+    writeMatrix(stdout, S, 2, 2);
+    
+ */
+
+
+
+
+    /*
     //EX1
     double* A = allocateMatrix(2,2);
     A[0] = 2;
@@ -130,7 +177,7 @@ int main(int argc, char** argv){
         SolveSystemGauss(x,A,b,3);
         writeMatrix(stdout, x, 1, 3);
     */
-   
+   /*
    cout << "Test: solvouhjokeStrassen" << endl;
         double* A = allocateMatrix(3,3);
         A[0] = 1;
@@ -159,6 +206,6 @@ int main(int argc, char** argv){
         writeMatrix(stdout, S, 4, 4);
        
 
-    
+    */
     return 0;
 }
