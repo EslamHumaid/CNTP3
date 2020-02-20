@@ -51,6 +51,93 @@ int main(int argc, char** argv){
     
  */
 
+    /*
+
+    cout << "Test: matrixMultiplyStrassen with 2*2 matrices |  expected result: S = { 9 , 2 , 33 , 4}" << endl;
+    double* A = allocateMatrix(2,2);
+    A[0] = 1;
+    A[1] = 2;
+    A[2] = 5;
+    A[3] = 4;
+
+    double* B = allocateMatrix(2,2);
+    B[0] = 5;
+    B[1] = 0;
+    B[2] = 2;
+    B[3] = 1;
+
+    double* S = allocateMatrix(2,2);
+    matrixMultiplyStrassen(S,A,B,2);
+    writeMatrix(stdout, S, 2, 2);
+
+    */
+
+   /*
+
+    cout << "Test: matrixMultiplyStrassen with 3*3 matrices |  expected result: S = {4,0,5,7,0,5,8,1,14}" << endl;
+    double* A = allocateMatrix(3,3);
+    A[0] = 1;
+    A[1] = 0;
+    A[2] = 2;
+    A[3] = 3;
+    A[4] = 0;
+    A[5] = 1;
+    A[6] = 2;
+    A[7] = 1;
+    A[8] = 4;
+
+    double* B = allocateMatrix(3,3);
+    B[0] = 2;
+    B[1] = 0;
+    B[2] = 1;
+    B[3] = 0;
+    B[4] = 1;
+    B[5] = 4;
+    B[6] = 1;
+    B[7] = 0;
+    B[8] = 2;
+
+    double* S = allocateMatrix(4,4);
+    matrixMultiplyStrassen(S,A,B,3);
+    writeMatrix(stdout, S, 4, 4);
+    
+    */
+
+    cout << "Test: SolveTriangularSystemUP | expected result: {-97/200 , -11/20 , 3/4 , 1/2}  "<< endl;
+
+        double* A = allocateMatrix(4,4);
+        A[0] = 10;
+        A[1] = 3;
+        A[2] = 8;
+        A[3] = 7;
+        A[4] = 0;
+        A[5] = 5;
+        A[6] = 3;
+        A[7] = 5;
+        A[8] = 0;
+        A[9] = 0;
+        A[10] = 2;
+        A[11] = 3;
+        A[12] = 0;
+        A[13] = 0;
+        A[14] = 0;
+        A[15] = 6;
+
+        double* x = allocateMatrix(4,1);
+        setMatrixZero(x,4,1);
+
+        double* b = allocateMatrix(4,1);
+        b[0] = 3;
+        b[1] = 2;
+        b[2] = 3;
+        b[3] = 3;
+
+        SolveTriangularSystemUP(x,A,b,4);
+        writeMatrix(stdout, x, 4, 1);
+
+
+
+
 
 
 
