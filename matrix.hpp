@@ -1,3 +1,6 @@
+/* Authors: Eslam HUMAID, Abrahim BAMATRAF.
+    Groupe : 485L
+*/
 #include <math.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -18,7 +21,7 @@ void        absMatrix           (double *Aabs,double *A, uint64_t n, uint64_t m)
 double      getMaxInMatrix      (double max, double *A, uint64_t n, uint64_t m);
 void        matrixSub           (double *S, double *A, double *B, uint64_t n, uint64_t m);
 void        matrixAdd           (double *S, double *A, double *B, uint64_t n, uint64_t m);
-
+bool        isPowerOftwo        (uint64_t n);
 /* Rajouter les prototypes de vos méthodes ici. Par exemple */
 
 /* Performs naive multiplication of matrix A (size p x k) by a matrix B (size k x r).

@@ -1,3 +1,6 @@
+/* Authors: Eslam HUMAID, Abrahim BAMATRAF.
+    Groupe : 485L
+*/
 #include "matrix.hpp"
 #include <cstdint>
 #include <iostream>
@@ -195,7 +198,7 @@ void        matrixMultiplyNaive (double *S, double *A, double *B, uint64_t p, ui
 }
 
 /*
-determine wether a number is in the forme 2^n
+determines wether a number can be written in the form 2^n
  */
 bool isPowerOftwo(uint64_t n){
   if(n>0)
@@ -223,7 +226,7 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
     if(n == 1){
       S[0] = A[0] * B[0] ;
 
-    }else if(n == 2){ //in this case the matrix is already in the form 2*2 so no need to divide it into smaller ones.
+    }else if(n == 2){ //in this case the matrix is already in the form 2x2 so no need to divide it into smaller ones.
       
       
       //using strassen formulas.
@@ -244,14 +247,14 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
 
 
 
-    }else{ // dividing the matrices into four n/2*n/2 matrices.
+    }else{ // dividing the matrices into four (n/2)x(n/2) matrices.
 
       //Copies of A and B to change their dimensions if needed.
       double* copyA = A;  
       double* copyB = B;
       
       if(!isPowerOftwo(n)){  //if the dimension is not 2^n*2^n
-        int validN = n; //the right dimension in the form 2^n.
+        uint64_t validN = n; //the right dimension in the form 2^n.
 
         while(!isPowerOftwo(validN)){ //to find the right dimension.
             validN += 1;
@@ -468,7 +471,7 @@ void        SolveTriangularSystemUP   (double *x, double *A, double *b, uint64_t
 
     for(int j = n-1 ; j >= 0 ; j-- ){ //index indicating the number of the column starting from the last column.
       
-      int indexPivot = (j * n) + j;  //the pivot is in the diagonal of A so the index of the line is the same as the column.
+      uint64_t indexPivot = (j * n) + j;  //the pivot is in the diagonal of A so the index of the line is the same as the column.
       double pivot = A[indexPivot];  //the pivot of the line
 
       b[j] = b[j] / pivot;  //index of the column of the pivot can also be used for the line in the vector.
@@ -537,8 +540,8 @@ bool        Triangularize           (double *A, double *b, uint64_t n){
         A[p+y] = A[p+y] - ((valUnderPivot/A[i])*A[i+y]);
       }
 
-      int LinePivot = (int)(i / n); //the line of the supposed pivot.
-      int indVect = (int)(p / n);  //index(in the vector) of the correct line of the pivot.
+      uint64_t LinePivot = (int)(i / n); //the line of the supposed pivot.
+      uint64_t indVect = (int)(p / n);  //index(in the vector) of the correct line of the pivot.
 
       b[indVect] = b[indVect] - (valUnderPivot/A[i])*b[LinePivot];  //applying the same operation to the vector
 
