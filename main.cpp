@@ -294,5 +294,11 @@ int main(int argc, char** argv){
        
 
     */
+   cout << "Test: SolveTriangularSystemUP | expected result: 1 , 1 , 3" << endl;
+            double A [] = {1,1,1,0,2,2,0,0,3};
+            double x [] = {0,0,0};
+            double b [] = {5,8,9};
+            SolveTriangularSystemUP(x,A,b,3); 
+            writeMatrix(stdout, x, 1, 3);
     return 0;
 }
