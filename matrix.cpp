@@ -466,22 +466,20 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
 */
 void        SolveTriangularSystemUP   (double *x, double *A, double *b, uint64_t n){
 
-    for(int i = n-1 ; i >= 0 ; i-- ){ 
-      double pivot = A[(i * n) + i];
-      b[i] = b[i] / pivot;
-      x[i] = b[i];
-      A[(i * n) + i] = pivot / pivot;
+    for(int j = n-1 ; j >= 0 ; j-- ){ //index indicating the number of the column starting from the last column.
+      
+      int indexPivot = (j * n) + j;  //the pivot is in the diagonal of A so the index of the line is the same as the column.
+      double pivot = A[indexPivot];  //the pivot of the line
 
-      for(int j = i-n ; j >= 0; j=j-n){
-        A[(i * n) + j] = A[(i * n) + j] - (A[(i * n) + j]*pivot);
-        b[j] = b[j] - (b[j]*b[i]);
+      b[j] = b[j] / pivot;  //index of the column of the pivot can also be used for the line in the vector.
+      x[j] = b[j]; //stocking the solution in x.
+      A[indexPivot] = pivot / pivot; //to make the pivot equal to 1.
 
-
+      for(int i = j-1 ; i >= 0; i--){ //index of the line starting from the line above the pivot.
+        b[i] = b[i] - (A[i*n+j]*b[j]); //modifiyng the vector first because we need A[i*n+j].
+        A[(i*n)+j] = A[(i*n)+j] - (A[(i*n)+j]*pivot);
 
       }
-      
-
-
 
     }
 }
@@ -495,20 +493,20 @@ void        SolveTriangularSystemUP   (double *x, double *A, double *b, uint64_t
         *  false in case of failure, for example matrix is impossible to triangularize. 
 */
 bool        Triangularize           (double *A, double *b, uint64_t n){
-  int toPivot = n +1;
+  int toPivot = n +1; //the number we add to the index of the pivot to reach the next one.
 
-  for(int i = 0 ; i <= n*n ; i = i + toPivot){
+  for(int i = 0 ; i <= n*n ; i = i + toPivot){  //running through the pivots.
 
-    if(A[i] == 0){  //swapping
+    if(A[i] == 0){  //if a pivot is null, we need to exchange the line with another one that is not null in the same column.
 
-      int j = i;
+      int j = i; //variable to stock the index of the correct line.
 
-      while(A[j] == 0 && j < n*n){
+      while(A[j] == 0 && j < n*n){ //searching for a non-null line.
         j = j + n;
       }
 
-      if(j > n*n){
-        return false;
+      if(j > n*n){ //if no non-null lines have been found,
+        return false; //there is no solution for the matrix.
       }
 
       for(int k = j%n ; k < n ; k++){  //swapping the lines
@@ -519,8 +517,8 @@ bool        Triangularize           (double *A, double *b, uint64_t n){
 
       }
 
-      int LinePivot = (int)(i / n);
-      int indVect = (int)(j / n);  //index in the vector
+      int LinePivot = (int)(i / n); //the line of the supposed pivot.
+      int indVect = (int)(j / n);  //index(in the vector) of the correct line of the pivot.
 
       //swapping the lines in the vector
       double tmp = b[LinePivot] ;
@@ -530,28 +528,25 @@ bool        Triangularize           (double *A, double *b, uint64_t n){
     }
   
 
-    //Elimination de gauss
-    for(int p = i+n; p <= n*n; p = p + n){
+    //Gauss Elimination
+    for(int p = i+n; p <= n*n; p = p + n){ //running through the elements below the pivot. 
 
-      double valUnderPivot = A[p];
-      int lastInLine = n - (p%n);
-      for(int y = 0; y < lastInLine ; y++){
+      double valUnderPivot = A[p]; //the value of the element.
+      int lastInLine = n - (p%n); //variable to stop the (for) loop when we reach the end of a line.
+      for(int y = 0; y < lastInLine ; y++){ //changing the values of the elements of the lines below the pivot.
         A[p+y] = A[p+y] - ((valUnderPivot/A[i])*A[i+y]);
       }
 
-      int LinePivot = (int)(i / n);
-      int indVect = (int)(p / n);  //index in the vector
+      int LinePivot = (int)(i / n); //the line of the supposed pivot.
+      int indVect = (int)(p / n);  //index(in the vector) of the correct line of the pivot.
 
-      b[indVect] = b[indVect] - (valUnderPivot/A[i])*b[LinePivot];  //applying the same operation the the vector
+      b[indVect] = b[indVect] - (valUnderPivot/A[i])*b[LinePivot];  //applying the same operation to the vector
 
     }
 
 
 
   }
-    
-    
-
     return true;
 }
 
@@ -565,13 +560,17 @@ bool        Triangularize           (double *A, double *b, uint64_t n){
         *  false in case of failure, for example matrix is of rank <n .
 */
 bool        SolveSystemGauss        (double *x, double *A, double *b, uint64_t n){
-    
+    //step 1: Triangularize
+    cout<< "triangularizing the matrix..." << endl;
     bool triangular = Triangularize(A,b,n);
+    cout<< "triangularized matrix :" << endl;
     writeMatrix(stdout, A, n, n);
     if(triangular){
+      //step 2: Solve the system
       SolveTriangularSystemUP(x,A,b,n);
       return true;
-    }else{
+
+    }else{ // if there is no solution for the matrix.
       return false;
     }
 
