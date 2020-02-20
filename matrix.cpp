@@ -185,7 +185,7 @@ void        matrixMultiplyNaive (double *S, double *A, double *B, uint64_t p, ui
       for (int i =0; i < p; i++){  //the line in A.
 
         for (int j=0; j < k; j++){  //the line in B and column in A.
-            S[i*r+s] += A[i*k+j] * B[j*k+s]; //using the rule (element A_ij has index i * m + j).
+            S[i*r+s] += A[i*k+j] * B[j*r+s]; //using the rule (element A_ij has index i * m + j).
         }
 
       }
@@ -217,7 +217,7 @@ bool isPowerOftwo(uint64_t n){
 
 /* Performs a multiplication of two sqaure matrices A and B (size n x n) by Strassen algorithm.
     We assume that S has already been allocated outside the function.
-    PRECOND:A,B have to be of size 2^n x 2
+    
  */
 void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n){
     if(n == 1){
@@ -246,25 +246,30 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
 
     }else{ // dividing the matrices into four n/2*n/2 matrices.
 
-      double* copyA = A;
+      //Copies of A and B to change their dimensions if needed.
+      double* copyA = A;  
       double* copyB = B;
       
-      if(!isPowerOftwo(n)){
-        int validN = n;
-        while(!isPowerOftwo(validN)){
+      if(!isPowerOftwo(n)){  //if the dimension is not 2^n*2^n
+        int validN = n; //the right dimension in the form 2^n.
+
+        while(!isPowerOftwo(validN)){ //to find the right dimension.
             validN += 1;
         }
-        copyA = allocateMatrix(validN,validN);
+
+        //changing the sizes of the copies of A and B.
+        copyA = allocateMatrix(validN,validN); 
         copyB = allocateMatrix(validN,validN);
 
+        //filling the copies while putting zeros in the added lines and columns.
         for(int i = 0 ; i < validN ; i++){
 
           for(int j = 0 ; j < validN; j++){
-            if((i < n) && (j < n)){
+            if((i < n) && (j < n)){  //the lines and columns of A and B
               copyA[(i*validN)+j] = A[(i*n) + j];
               copyB[(i*validN)+j] = B[(i*n) + j];
 
-            }else{
+            }else{ //the new added lines and columns.
               copyA[(i*validN)+j] = 0;
               copyB[(i*validN)+j] = 0;
             }
@@ -334,6 +339,9 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
            }
          }
        }
+
+        
+
       
 
       }
@@ -412,7 +420,38 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
       
 
       }
+
+      //freeing the space dynamically allocated.
+      free(copyA);
+      free(copyB);
+
+      free(tmp);
+      free(tmp2);
+
+      free(resBlock0);
+      free(resBlock1);
+      free(resBlock2);
+      free(resBlock3);
+
+      free(m1);
+      free(m2);
+      free(m3);
+      free(m4);
+      free(m5);
+      free(m6);
+      free(m7);
+
+      free(A0);
+      free(A1);
+      free(A2);
+      free(A3);
+      free(B0);
+      free(B1);
+      free(B2);
+      free(B3);
+
       
+
 
     }
 
@@ -427,7 +466,7 @@ void        matrixMultiplyStrassen (double *S, double *A, double *B, uint64_t n)
 */
 void        SolveTriangularSystemUP   (double *x, double *A, double *b, uint64_t n){
 
-    for(int i = n-1 ; i >= 0 ; i-- ){
+    for(int i = n-1 ; i >= 0 ; i-- ){ 
       double pivot = A[(i * n) + i];
       b[i] = b[i] / pivot;
       x[i] = b[i];

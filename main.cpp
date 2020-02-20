@@ -157,6 +157,7 @@ int main(int argc, char** argv){
         double* S = allocateMatrix(4,4);
         matrixMultiplyStrassen(S,A,B,3);
         writeMatrix(stdout, S, 4, 4);
+       
 
     
     return 0;
