@@ -582,3 +582,62 @@ bool        SolveSystemGauss        (double *x, double *A, double *b, uint64_t n
     
 }
 
+bool        decompLU           (double *A, uint64_t n){
+  int toPivot = n +1; //the number we add to the index of the pivot to reach the next one.
+
+  for(int i = 0 ; i <= n*n ; i = i + toPivot){  //running through the pivots.
+
+    if(A[i] == 0){  //if a pivot is null, we need to exchange the line with another one that is not null in the same column.
+
+      int j = i; //variable to stock the index of the correct line.
+
+      while(A[j] == 0 && j < n*n){ //searching for a non-null line.
+        j = j + n;
+      }
+
+      if(j > n*n){ //if no non-null lines have been found,
+        return false; //there is no solution for the matrix.
+      }
+
+      for(int k = j%n ; k < n ; k++){  //swapping the lines
+        double tmp = A[i + k] ;
+        A[i+k] = A[j+k];
+        A[j+k] = tmp;
+
+
+      }
+
+
+    }
+  
+
+    //Gauss Elimination
+    for(int p = i+n; p <= n*n; p = p + n){ //running through the elements below the pivot. 
+
+      double valUnderPivot = A[p]; //the value of the element.
+      int lastInLine = n - (p%n); //variable to stop the (for) loop when we reach the end of a line.
+      A[p] = (valUnderPivot/A[i]);
+      for(int y = 1; y < lastInLine ; y++){ //changing the values of the elements of the lines below the pivot.
+        A[p+y] = A[p+y] - ((valUnderPivot/A[i])*A[i+y]);
+      }
+      
+    }
+
+  }
+    return true;
+}
+
+double det(double *A, uint64_t n){
+  //decompLU(A,n);
+  writeMatrix(stdout,A,n,n);
+
+  int toPivot = n +1;
+  double det = 1;
+  for(int i = 0 ; i < n*n ; i+= toPivot){
+
+    det = det * A[i]; 
+  }
+
+  return det;
+}
+

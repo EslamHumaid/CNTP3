@@ -210,7 +210,7 @@ int main(int argc, char** argv){
     
     */
 
-    
+    /* 
     cout << "Testing the function: SolveSystemGauss , expected result: {2 , -3 , 3 , -1}  "<< endl;
         // Taken from TD exercises 
 
@@ -244,7 +244,64 @@ int main(int argc, char** argv){
         SolveSystemGauss(x,A,b,4);
         writeMatrix(stdout, x, 4, 1);
 
-    
+    */
+        
+        double* A = allocateMatrix(4,4);
+        A[0] = 2;
+        A[1] = 3;
+        A[2] = 1;
+        A[3] = 5;
+        A[4] = 6;
+        A[5] = 13;
+        A[6] = 5;
+        A[7] = 19;
+        A[8] = 2;
+        A[9] = 19;
+        A[10] = 10;
+        A[11] = 23;
+        A[12] = 4;
+        A[13] = 10;
+        A[14] = 11;
+        A[15] = 31;
 
+        double* b = allocateMatrix(4,1);
+        b[0] = 0;
+        b[1] = 0;
+        b[2] = 0;
+        b[3] = 0;
+
+        writeMatrix(stdout, A, 4, 4);
+
+        decompLU(A,4);
+        cout<<"after"<<endl;
+        writeMatrix(stdout, A, 4, 4);
+
+        cout<< "deter = " << det(A,4) << endl;
+        
+
+        /* 
+        double* A = allocateMatrix(4,4);
+        A[0] = 4;
+        A[1] = 3;
+        A[2] = 2;
+        A[3] = 1;
+        A[4] = 1;
+        A[5] = 10;
+        A[6] = 3;
+        A[7] = 4;
+        A[8] = 5;
+        A[9] = 3;
+        A[10] = 2;
+        A[11] = -4;
+        A[12] = 4;
+        A[13] = 8;
+        A[14] = 7;
+        A[15] = 9;
+
+        cout<< "deter = " << det(A,4) << endl;
+        */
+
+
+    
     return 0;
 }
