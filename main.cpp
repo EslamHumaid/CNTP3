@@ -245,7 +245,7 @@ int main(int argc, char** argv){
         writeMatrix(stdout, x, 4, 1);
 
     */
-        
+        /*
         double* A = allocateMatrix(4,4);
         A[0] = 2;
         A[1] = 3;
@@ -270,16 +270,16 @@ int main(int argc, char** argv){
         b[2] = 0;
         b[3] = 0;
 
-        writeMatrix(stdout, A, 4, 4);
+        
 
-        decompLU(A,4);
-        cout<<"after"<<endl;
+        
+       
         writeMatrix(stdout, A, 4, 4);
 
         cout<< "deter = " << det(A,4) << endl;
         
-
-        /* 
+        */
+        /*
         double* A = allocateMatrix(4,4);
         A[0] = 4;
         A[1] = 3;
@@ -300,6 +300,17 @@ int main(int argc, char** argv){
 
         cout<< "deter = " << det(A,4) << endl;
         */
+        double* A = allocateMatrix(3,3);
+        A[0] = 1;
+        A[1] = 1;
+        A[2] = 1;
+        A[3] = 4;
+        A[4] = 3;
+        A[5] = -1;
+        A[6] = 3;
+        A[7] = 5;
+        A[8] = 3;
+        cout<< "deter = " << det(A,3) << endl;
 
 
     

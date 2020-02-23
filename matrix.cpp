@@ -628,7 +628,7 @@ bool        decompLU           (double *A, uint64_t n){
 }
 
 double det(double *A, uint64_t n){
-  //decompLU(A,n);
+  decompLU(A,n);
   writeMatrix(stdout,A,n,n);
 
   int toPivot = n +1;
