@@ -264,11 +264,7 @@ int main(int argc, char** argv){
         A[14] = 11;
         A[15] = 31;
 
-        double* b = allocateMatrix(4,1);
-        b[0] = 0;
-        b[1] = 0;
-        b[2] = 0;
-        b[3] = 0;
+        
 
         
 
@@ -277,12 +273,12 @@ int main(int argc, char** argv){
         writeMatrix(stdout, A, 4, 4);
 
         cout<< "deter = " << det(A,4) << endl;
-        
         */
+        
         /*
         double* A = allocateMatrix(4,4);
         A[0] = 4;
-        A[1] = 3;
+        A[1] = 0;
         A[2] = 2;
         A[3] = 1;
         A[4] = 1;
@@ -291,7 +287,7 @@ int main(int argc, char** argv){
         A[7] = 4;
         A[8] = 5;
         A[9] = 3;
-        A[10] = 2;
+        A[10] = 0;
         A[11] = -4;
         A[12] = 4;
         A[13] = 8;
@@ -300,18 +296,74 @@ int main(int argc, char** argv){
 
         cout<< "deter = " << det(A,4) << endl;
         */
-        double* A = allocateMatrix(3,3);
-        A[0] = 1;
+       /*
+    cout << "Testing the function: SolveSystemGauss , expected result: {7 , -1 , 10 , -4}  "<< endl;
+
+        double* A = allocateMatrix(4,4);
+        A[0] = 2;
+        A[1] = 3;
+        A[2] = 1;
+        A[3] = 5;
+        A[4] = 6;
+        A[5] = 13;
+        A[6] = 5;
+        A[7] = 19;
+        A[8] = 2;
+        A[9] = 19;
+        A[10] = 10;
+        A[11] = 23;
+        A[12] = 4;
+        A[13] = 10;
+        A[14] = 11;
+        A[15] = 31;
+
+        double* x = allocateMatrix(4,1);
+        setMatrixZero(x,4,1);
+
+        double* b = allocateMatrix(4,1);
+        b[0] = 1;
+        b[1] = 3;
+        b[2] = 3;
+        b[3] = 4;
+
+        SolveSystemLU(x,A,b,4);
+        writeMatrix(stdout, x, 4, 1);
+
+        
+        */
+
+       cout << "Testing the function: SolveSystemGauss , expected result: {2 , -3 , 3 , -1}  "<< endl;
+        // Taken from TD exercises 
+
+        double* A = allocateMatrix(4,4);
+        A[0] = 2;
         A[1] = 1;
         A[2] = 1;
-        A[3] = 4;
-        A[4] = 3;
-        A[5] = -1;
-        A[6] = 3;
-        A[7] = 5;
-        A[8] = 3;
-        cout<< "deter = " << det(A,3) << endl;
+        A[3] = -3;
+        A[4] = 6;
+        A[5] = 2;
+        A[6] = 5;
+        A[7] = -8;
+        A[8] = 4;
+        A[9] = 3;
+        A[10] = 3;
+        A[11] = -9;
+        A[12] = -2;
+        A[13] = -2;
+        A[14] = -5;
+        A[15] = 10;
 
+        double* x = allocateMatrix(4,1);
+        setMatrixZero(x,4,1);
+
+        double* b = allocateMatrix(4,1);
+        b[0] = 7;
+        b[1] = 29;
+        b[2] = 17;
+        b[3] = -23;
+
+        SolveSystemLU(x,A,b,4);
+        writeMatrix(stdout, x, 4, 1);
 
     
     return 0;

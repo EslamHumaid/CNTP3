@@ -24,6 +24,7 @@ void        matrixAdd           (double *S, double *A, double *B, uint64_t n, ui
 bool        isPowerOftwo        (uint64_t n);
 bool        decompLU            (double *A, uint64_t n);
 double      det                 (double *A, uint64_t n);
+bool        SolveSystemLU        (double *x, double *A, double *b, uint64_t n);
 /* Rajouter les prototypes de vos méthodes ici. Par exemple */
 
 /* Performs naive multiplication of matrix A (size p x k) by a matrix B (size k x r).

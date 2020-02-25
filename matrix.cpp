@@ -641,3 +641,40 @@ double det(double *A, uint64_t n){
   return det;
 }
 
+bool        SolveSystemLU        (double *x, double *A, double *b, uint64_t n){
+  bool decompoesed = decompLU(A,n);
+  
+  if(decompoesed){
+    double * L = allocateMatrix(n,n) ;
+    double * U = allocateMatrix(n,n) ;
+
+    for(int i = 0 ; i < n ; i++){
+      for(int j = 0 ; j < n ; j++){ 
+        if(i <= j){
+          U[i * n + j] = A[i * n + j];
+          if(i == j){
+            L[i * n + j] = 1;
+          }
+        }else{
+          L[i * n + j] = A[i * n + j];
+        }
+
+      }
+    }
+    
+
+    
+    Triangularize(L,b,n);
+    SolveTriangularSystemUP(x,U,b,n);
+
+    freeMatrix(L);
+    freeMatrix(U);
+    
+    return true;
+
+  }else{
+    return false;
+  }
+
+
+}
