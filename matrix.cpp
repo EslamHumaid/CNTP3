@@ -588,7 +588,7 @@ bool        decompLU           (double *A, uint64_t n){
   for(int i = 0 ; i <= n*n ; i = i + toPivot){  //running through the pivots.
 
     if(A[i] == 0){  //if a pivot is null, we need to exchange the line with another one that is not null in the same column.
-
+      /*
       int j = i; //variable to stock the index of the correct line.
 
       while(A[j] == 0 && j < n*n){ //searching for a non-null line.
@@ -606,11 +606,12 @@ bool        decompLU           (double *A, uint64_t n){
 
 
       }
-
+      */
+     return false;
 
     }
   
-
+    
     //Gauss Elimination
     for(int p = i+n; p <= n*n; p = p + n){ //running through the elements below the pivot. 
 

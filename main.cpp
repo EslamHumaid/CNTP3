@@ -331,40 +331,155 @@ int main(int argc, char** argv){
 
         
         */
-
-       cout << "Testing the function: SolveSystemGauss , expected result: {2 , -3 , 3 , -1}  "<< endl;
+       /*
+       cout << "Test 2.a with b1 , expected result: {1 , 1 , 1 , 1}  "<< endl;
         // Taken from TD exercises 
 
         double* A = allocateMatrix(4,4);
-        A[0] = 2;
-        A[1] = 1;
-        A[2] = 1;
-        A[3] = -3;
-        A[4] = 6;
-        A[5] = 2;
-        A[6] = 5;
-        A[7] = -8;
-        A[8] = 4;
-        A[9] = 3;
-        A[10] = 3;
-        A[11] = -9;
-        A[12] = -2;
-        A[13] = -2;
-        A[14] = -5;
+        A[0] = 10;
+        A[1] = 7;
+        A[2] = 8;
+        A[3] = 7;
+        A[4] = 7;
+        A[5] = 5;
+        A[6] = 6;
+        A[7] = 5;
+        A[8] = 8;
+        A[9] = 6;
+        A[10] = 10;
+        A[11] = 9;
+        A[12] = 7;
+        A[13] = 5;
+        A[14] = 9;
         A[15] = 10;
 
         double* x = allocateMatrix(4,1);
         setMatrixZero(x,4,1);
 
         double* b = allocateMatrix(4,1);
-        b[0] = 7;
-        b[1] = 29;
-        b[2] = 17;
-        b[3] = -23;
+        b[0] = 32;
+        b[1] = 23;
+        b[2] = 33;
+        b[3] = 31;
 
         SolveSystemLU(x,A,b,4);
         writeMatrix(stdout, x, 4, 1);
+        */
+       /*
+        cout << "Test 2.a with b2 :  "<< endl;
+        // Taken from TD exercises 
+        
+        double* A = allocateMatrix(4,4);
+        A[0] = 10;
+        A[1] = 7;
+        A[2] = 8;
+        A[3] = 7;
+        A[4] = 7;
+        A[5] = 5;
+        A[6] = 6;
+        A[7] = 5;
+        A[8] = 8;
+        A[9] = 6;
+        A[10] = 10;
+        A[11] = 9;
+        A[12] = 7;
+        A[13] = 5;
+        A[14] = 9;
+        A[15] = 10;
 
-    
+        double* x = allocateMatrix(4,1);
+        setMatrixZero(x,4,1);
+
+        double* b = allocateMatrix(4,1);
+        b[0] = 32.1;
+        b[1] = 22.9;
+        b[2] = 33.1;
+        b[3] = 30.9;
+
+        SolveSystemLU(x,A,b,4);
+        writeMatrix(stdout, x, 4, 1);
+        */
+        /*
+        cout << "Test 2.b with d1 :  "<< endl;
+        // Taken from TD exercises 
+        
+        double* A = allocateMatrix(4,4);
+        A[0] = 1;
+        A[1] = 7;
+        A[2] = 2;
+        A[3] = 1;
+        A[4] = 7;
+        A[5] = 5;
+        A[6] = 1;
+        A[7] = 5;
+        A[8] = 8;
+        A[9] = 6;
+        A[10] = 10;
+        A[11] = 9;
+        A[12] = 7;
+        A[13] = 5;
+        A[14] = 9;
+        A[15] = 1;
+
+        double* x = allocateMatrix(4,1);
+        setMatrixZero(x,4,1);
+
+        double* b = allocateMatrix(4,1);
+        b[0] = 11;
+        b[1] = 18;
+        b[2] = 33;
+        b[3] = 22;
+
+        SolveSystemLU(x,A,b,4);
+        writeMatrix(stdout, x, 4, 1);
+        */
+        
+       /*
+        cout << "Test 2.b with d2 :  "<< endl;
+        // Taken from TD exercises 
+
+        double* A = allocateMatrix(4,4);
+        A[0] = 1;
+        A[1] = 7;
+        A[2] = 2;
+        A[3] = 1;
+        A[4] = 7;
+        A[5] = 5;
+        A[6] = 1;
+        A[7] = 5;
+        A[8] = 8;
+        A[9] = 6;
+        A[10] = 10;
+        A[11] = 9;
+        A[12] = 7;
+        A[13] = 5;
+        A[14] = 9;
+        A[15] = 1;
+
+        double* x = allocateMatrix(4,1);
+        setMatrixZero(x,4,1);
+
+        double* b = allocateMatrix(4,1);
+        b[0] = 11.1;
+        b[1] = 17.9;
+        b[2] = 33.1;
+        b[3] = 21.9;
+
+        SolveSystemLU(x,A,b,4);
+        writeMatrix(stdout, x, 4, 1);
+        */
+
+       double* A = allocateMatrix(3,3);
+        A[0] = 1 ;
+        A[1] = 2;
+        A[2] = 3 ;
+        A[3] = 2 ;
+        A[4] = 4 ;
+        A[5] = 5 ;
+        A[6] = 1 ;
+        A[7] = 3;
+        A[8] = 4 ;
+        
+        cout << decompLU(A,3) << endl;
     return 0;
 }
