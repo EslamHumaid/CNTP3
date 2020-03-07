@@ -566,7 +566,6 @@ bool        SolveSystemGauss        (double *x, double *A, double *b, uint64_t n
     //step 1: Triangularize
     cout<< "triangularizing the matrix..." << endl;
     bool triangular = Triangularize(A,b,n);
-    cout<< "triangularized matrix :" << endl;
     
     if(triangular){
       cout<< "triangularized with success. triangularized matrix :" << endl;
@@ -582,36 +581,27 @@ bool        SolveSystemGauss        (double *x, double *A, double *b, uint64_t n
     
 }
 
+
+/*
+decomposes a matrix A (size n*n) into upper triangular matrix U and lower triangular matrix L and stocking them in the same matrix A,
+after the decomposition the matrix A contains the two matrices L and U.
+Returns a boolean variable: 
+        *  true in case of success and 
+        *  false in case of failure, for example matrix can not be decomposed .
+*/
+
 bool        decompLU           (double *A, uint64_t n){
   int toPivot = n +1; //the number we add to the index of the pivot to reach the next one.
 
   for(int i = 0 ; i <= n*n ; i = i + toPivot){  //running through the pivots.
 
-    if(A[i] == 0){  //if a pivot is null, we need to exchange the line with another one that is not null in the same column.
-      /*
-      int j = i; //variable to stock the index of the correct line.
+    if(A[i] == 0){  //if a pivot is null, we can't use decompose LU 
 
-      while(A[j] == 0 && j < n*n){ //searching for a non-null line.
-        j = j + n;
-      }
-
-      if(j > n*n){ //if no non-null lines have been found,
-        return false; //there is no solution for the matrix.
-      }
-
-      for(int k = j%n ; k < n ; k++){  //swapping the lines
-        double tmp = A[i + k] ;
-        A[i+k] = A[j+k];
-        A[j+k] = tmp;
-
-
-      }
-      */
      return false;
 
     }
   
-    
+    // in case the the pivot is not null we continue the decomposition
     //Gauss Elimination
     for(int p = i+n; p <= n*n; p = p + n){ //running through the elements below the pivot. 
 
@@ -628,13 +618,16 @@ bool        decompLU           (double *A, uint64_t n){
     return true;
 }
 
+
+/*
+calculates the determinant of a matrix A (size n*n) using LU decomposition.
+*/
 double det(double *A, uint64_t n){
   decompLU(A,n);
-  writeMatrix(stdout,A,n,n);
 
   int toPivot = n +1;
   double det = 1;
-  for(int i = 0 ; i < n*n ; i+= toPivot){
+  for(int i = 0 ; i < n*n ; i+= toPivot){ //calculating the determinant by multiplying the diagonal element of the matrix
 
     det = det * A[i]; 
   }
@@ -642,21 +635,33 @@ double det(double *A, uint64_t n){
   return det;
 }
 
+
+/*
+    Solves a system of linear equations Ax=b, given a matrix A (size n x n) and vector b(size n).
+    Uses LU decomposition algorithm .
+    After the procedure, vector x contains the solution to Ax=b.
+    We assume that x has been allocated outside the function.
+        Returns a boolean variable: 
+        *  true in case of success and 
+        *  false in case of failure, for example matrix can not be decomposed .
+*/
 bool        SolveSystemLU        (double *x, double *A, double *b, uint64_t n){
   bool decompoesed = decompLU(A,n);
   
-  if(decompoesed){
+  if(decompoesed){ // if the matrix was successfully decomposed we continue solving the system
+    //allocating the new matrices L and U
     double * L = allocateMatrix(n,n) ;
     double * U = allocateMatrix(n,n) ;
 
-    for(int i = 0 ; i < n ; i++){
-      for(int j = 0 ; j < n ; j++){ 
-        if(i <= j){
+    //Extracting the matrices L and U from the matrix A
+    for(int i = 0 ; i < n ; i++){     //running through each line
+      for(int j = 0 ; j < n ; j++){   //running through each column
+        if(i <= j){     //Extracting the element of U
           U[i * n + j] = A[i * n + j];
-          if(i == j){
+          if(i == j){    // all the diagonal element of L are equal to 1
             L[i * n + j] = 1;
           }
-        }else{
+        }else{ //Extracting element of L
           L[i * n + j] = A[i * n + j];
         }
 
@@ -665,15 +670,16 @@ bool        SolveSystemLU        (double *x, double *A, double *b, uint64_t n){
     
 
     
-    Triangularize(L,b,n);
-    SolveTriangularSystemUP(x,U,b,n);
+    Triangularize(L,b,n); //descente
+    SolveTriangularSystemUP(x,U,b,n); //remontée
 
+    //desallocating the matrices L and U after we finish solving the system
     freeMatrix(L);
     freeMatrix(U);
     
     return true;
 
-  }else{
+  }else{//the system can not be decomposed
     return false;
   }
 
