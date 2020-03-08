@@ -140,6 +140,8 @@ int main(int argc, char** argv){
         writeMatrix(stdout, x, 4, 1);
     
     */
+
+
     /*
     cout << "Test of the function:  Triangularize "<< endl;  
     cout << "Expected result of A: {1,-3,2,0,7,-3,0,0,17} "<< endl;  //Example taken from the course
@@ -171,9 +173,8 @@ int main(int argc, char** argv){
         cout << "Writing the matrix B"<< endl;
         writeMatrix(stdout, b, 3, 1);               //b[3] expected to be 32 got 4.571429 because the last line of the matrices A , b
                                                     // was divided by 7 which will not affect the solution of the matrix
-
-    
    */
+
     /*
     cout << "Testing the function: SolveSystemGauss , expected result: {7 , -1 , 10 , -4}  "<< endl;
 
@@ -245,7 +246,8 @@ int main(int argc, char** argv){
         writeMatrix(stdout, x, 4, 1);
 
     */
-        /*
+
+    /*
         double* A = allocateMatrix(4,4);
         A[0] = 2;
         A[1] = 3;
@@ -295,9 +297,11 @@ int main(int argc, char** argv){
         A[15] = 9;
 
         cout<< "deter = " << det(A,4) << endl;
-        */
-       /*
-    cout << "Testing the function: SolveSystemGauss , expected result: {7 , -1 , 10 , -4}  "<< endl;
+    */
+
+
+    /*
+    cout << "Testing the function: SolveSystemLU , expected result: {7 , -1 , 10 , -4}  "<< endl;
 
         double* A = allocateMatrix(4,4);
         A[0] = 2;
@@ -330,8 +334,10 @@ int main(int argc, char** argv){
         writeMatrix(stdout, x, 4, 1);
 
         
-        */
-       /*
+    */
+       
+    
+    /*
        cout << "Test 2.a with b1 , expected result: {1 , 1 , 1 , 1}  "<< endl;
         // Taken from TD exercises 
 
@@ -364,8 +370,10 @@ int main(int argc, char** argv){
 
         SolveSystemLU(x,A,b,4);
         writeMatrix(stdout, x, 4, 1);
-        */
-       /*
+    */
+
+
+    /*
         cout << "Test 2.a with b2 :  "<< endl;
         // Taken from TD exercises 
         
@@ -401,7 +409,7 @@ int main(int argc, char** argv){
         */
         /*
         cout << "Test 2.b with d1 :  "<< endl;
-        // Taken from TD exercises 
+         
         
         double* A = allocateMatrix(4,4);
         A[0] = 1;
@@ -432,11 +440,12 @@ int main(int argc, char** argv){
 
         SolveSystemLU(x,A,b,4);
         writeMatrix(stdout, x, 4, 1);
-        */
+    */
+
         
-       /*
+    
         cout << "Test 2.b with d2 :  "<< endl;
-        // Taken from TD exercises 
+        
 
         double* A = allocateMatrix(4,4);
         A[0] = 1;
@@ -467,19 +476,7 @@ int main(int argc, char** argv){
 
         SolveSystemLU(x,A,b,4);
         writeMatrix(stdout, x, 4, 1);
-        */
+    
 
-       double* A = allocateMatrix(3,3);
-        A[0] = 1 ;
-        A[1] = 2;
-        A[2] = 3 ;
-        A[3] = 2 ;
-        A[4] = 4 ;
-        A[5] = 5 ;
-        A[6] = 1 ;
-        A[7] = 3;
-        A[8] = 4 ;
-        
-        cout << decompLU(A,3) << endl;
     return 0;
 }

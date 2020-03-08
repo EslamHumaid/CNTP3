@@ -621,18 +621,27 @@ bool        decompLU           (double *A, uint64_t n){
 
 /*
 calculates the determinant of a matrix A (size n*n) using LU decomposition.
+this fonction returns:
+* det(A) if the matrix can be decomposed.
+*  -1 if not.
 */
 double det(double *A, uint64_t n){
-  decompLU(A,n);
+  bool decomposed = decompLU(A,n);
 
-  int toPivot = n +1;
-  double det = 1;
-  for(int i = 0 ; i < n*n ; i+= toPivot){ //calculating the determinant by multiplying the diagonal element of the matrix
+  if(decomposed){ //the matrix was decomposed with success.
+    int toPivot = n +1;
+    double det = 1;
+    for(int i = 0 ; i < n*n ; i+= toPivot){ //calculating the determinant by multiplying the diagonal element of the matrix
 
-    det = det * A[i]; 
+      det = det * A[i]; 
+    }
+  
+
+    return det;
+  }else{ //the system can not be decomposed.
+    return -1;
   }
 
-  return det;
 }
 
 
